@@ -10,7 +10,6 @@
     <string name="scan">Scan</string>
 
     <string-array name="drawer_fragment_classes">
-        <item>SignInFragment</item>
         <item>ScanFragment</item>
         <item>EventsFragment</item>
         <item>AboutFragment</item>

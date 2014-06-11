@@ -9,9 +9,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import io.vinnie.servitetracker.android.fragments.SignInFragment;
-
-
 public class MainActivity extends Activity implements DrawerAdapter.DrawerItemListener {
 
     private DrawerAdapter drawerAdapter = null;
@@ -22,13 +19,9 @@ public class MainActivity extends Activity implements DrawerAdapter.DrawerItemLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, new SignInFragment())
-                    .commit();
-        }
 
         setupDrawer();
+        onDrawerItemSelected(0);
     }
 
     private void setupDrawer() {
