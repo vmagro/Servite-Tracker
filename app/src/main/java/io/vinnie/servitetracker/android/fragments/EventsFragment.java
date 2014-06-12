@@ -12,12 +12,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.DeleteCallback;
@@ -29,6 +26,7 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import io.vinnie.servitetracker.android.EventsAdapter;
 import io.vinnie.servitetracker.android.MainActivity;
 import io.vinnie.servitetracker.android.R;
 import io.vinnie.servitetracker.android.TitleProvider;
@@ -102,7 +100,7 @@ public class EventsFragment extends ListFragment implements TitleProvider {
         ParseQuery.getQuery("Event").findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
-                setListAdapter(new EventsAdapter(parseObjects));
+                setListAdapter(new EventsAdapter(getActivity(), parseObjects));
             }
         });
     }
@@ -138,38 +136,4 @@ public class EventsFragment extends ListFragment implements TitleProvider {
                 .show();
     }
 
-    private class EventsAdapter extends BaseAdapter {
-
-        private List<ParseObject> events;
-
-        public EventsAdapter(List<ParseObject> parseObjects) {
-            events = parseObjects;
-        }
-
-        @Override
-        public int getCount() {
-            return events.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return events.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return events.get(position).getObjectId().hashCode();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView != null && convertView instanceof TextView) {
-                ((TextView) convertView).setText(events.get(position).getString("name"));
-                return convertView;
-            }
-            TextView view = (TextView) View.inflate(getActivity(), android.R.layout.simple_list_item_1, null);
-            view.setText(events.get(position).getString("name"));
-            return view;
-        }
-    }
 }

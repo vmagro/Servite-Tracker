@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -17,6 +18,7 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 import io.vinnie.servitetracker.android.CardListener;
+import io.vinnie.servitetracker.android.EventsAdapter;
 import io.vinnie.servitetracker.android.R;
 import io.vinnie.servitetracker.android.TitleProvider;
 
@@ -29,6 +31,8 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
 
     private EditText manualEntry;
 
+    private Spinner eventSpinner;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_scan, null);
@@ -40,6 +44,9 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
 
         manualEntry = (EditText) view.findViewById(R.id.manual_card_entry);
         view.findViewById(R.id.btn_go).setOnClickListener(this);
+
+        eventSpinner = (Spinner) view.findViewById(R.id.event_spinner);
+        loadSpinner();
 
         return view;
     }
@@ -55,6 +62,11 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject user = parseObjects.get(0);
+                ParseObject eventRecord = new ParseObject("EventRecord");
+                eventRecord.put("name", user.getString("firstName") + " " + user.getString("lastName"));
+                eventRecord.put("event", eventSpinner.getSelectedItem());
+
+
                 studentName.setText(user.getString("firstName") + " " + user.getString("lastName"));
                 studentPriory.setText(user.getString("priory"));
                 studentYear.setText(user.getString("year"));
@@ -72,4 +84,14 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
                 break;
         }
     }
+
+    private void loadSpinner() {
+        ParseQuery.getQuery("Event").findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                eventSpinner.setAdapter(new EventsAdapter(getActivity(), parseObjects));
+            }
+        });
+    }
+
 }

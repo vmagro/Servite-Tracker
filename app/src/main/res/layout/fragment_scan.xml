@@ -36,11 +36,19 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/scan_a_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_centerInParent="true"
         android:text="@string/scan_a_card" />
+
+    <Spinner
+        android:id="@+id/event_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scan_a_card"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btn_go"
