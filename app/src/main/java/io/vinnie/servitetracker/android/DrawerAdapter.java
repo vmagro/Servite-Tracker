@@ -39,7 +39,7 @@ public class DrawerAdapter extends BaseAdapter implements ListView.OnItemClickLi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView != null && convertView instanceof TextView) {
-            ((TextView) convertView.getTag()).setText(titles[position]);
+            ((TextView) convertView).setText(titles[position]);
             return convertView;
         }
         TextView view = (TextView) View.inflate(context, R.layout.drawer_item, null);
