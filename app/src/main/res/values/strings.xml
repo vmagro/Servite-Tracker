@@ -37,5 +37,6 @@
     <string name="is_not_admin">is no longer an admin</string>
     <string name="tally">Totals</string>
     <string name="log">Logs</string>
+    <string name="already_scanned">Already scanned</string>
 
 </resources>

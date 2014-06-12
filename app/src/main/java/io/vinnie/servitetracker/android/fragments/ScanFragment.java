@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -59,26 +60,39 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
     }
 
     @Override
-    public void onCardScanned(String cardData) {
+    public void onCardScanned(final String cardData) {
         ParseQuery.getQuery("Student").whereEqualTo("idNumber", cardData).findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject user = parseObjects.get(0);
-                ParseObject eventRecord = new ParseObject("EventRecord");
+                final ParseObject eventRecord = new ParseObject("EventRecord");
                 eventRecord.put("name", user.getString("firstName") + " " + user.getString("lastName"));
+                eventRecord.put("idNumber", user.getString("idNumber"));
                 eventRecord.put("priory", user.getString("priory"));
                 eventRecord.put("year", user.getString("year"));
                 eventRecord.put("event", ((ParseObject) eventSpinner.getSelectedItem()).getObjectId());
-                eventRecord.saveEventually(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null)
-                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_LONG).show();
-                    }
-                });
 
+                ParseQuery.getQuery("EventRecord")
+                        .whereEqualTo("idNumber", cardData)
+                        .whereEqualTo("event", ((ParseObject) eventSpinner.getSelectedItem()).getObjectId())
+                        .countInBackground(new CountCallback() {
+                            @Override
+                            public void done(int i, ParseException e) {
+                                if (i == 0) {
+                                    eventRecord.saveEventually(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e != null)
+                                                Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
+                                            else
+                                                Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getActivity(), getString(R.string.already_scanned), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
 
                 studentName.setText(user.getString("firstName") + " " + user.getString("lastName"));
                 studentPriory.setText(user.getString("priory"));
