@@ -2,6 +2,7 @@ package io.vinnie.servitetracker.android;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,7 +10,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements DrawerAdapter.DrawerItemListener {
+public class MainActivity extends Activity implements DrawerAdapter.DrawerItemListener,
+        FragmentManager.OnBackStackChangedListener {
 
     private DrawerAdapter drawerAdapter = null;
     private ArrayList<Fragment> drawerFragments = new ArrayList<Fragment>();
@@ -22,8 +24,10 @@ public class MainActivity extends Activity implements DrawerAdapter.DrawerItemLi
 
         setupDrawer();
 
+        getFragmentManager().addOnBackStackChangedListener(this);
+
         getFragmentManager().beginTransaction()
-                .add(R.id.content_frame, drawerFragments.get(0))
+                .add(R.id.content_frame, drawerFragments.get(0), "activeFragment")
                 .commit();
 
         setTitle(((TitleProvider) drawerFragments.get(0)).getTitle(this));
@@ -65,13 +69,28 @@ public class MainActivity extends Activity implements DrawerAdapter.DrawerItemLi
     @Override
     public void onDrawerItemSelected(int position) {
         Fragment fragment = drawerFragments.get(position);
+        swapFragment(fragment);
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public void swapFragment(Fragment fragment) {
         getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, fragment, "activeFragment")
                 .addToBackStack(null)
                 .commit();
 
-        setTitle(((TitleProvider) fragment).getTitle(this));
+        if (fragment instanceof TitleProvider)
+            setTitle(((TitleProvider) fragment).getTitle(this));
+    }
 
-        drawerLayout.closeDrawer(GravityCompat.START);
+    @Override
+    public void onBackStackChanged() {
+        Fragment active = getFragmentManager().findFragmentByTag("activeFragment");
+        if (active == null)
+            return;
+        if (active instanceof TitleProvider) {
+            setTitle(((TitleProvider) active).getTitle(this));
+        }
     }
 }
