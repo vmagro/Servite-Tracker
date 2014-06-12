@@ -24,16 +24,16 @@ import java.util.List;
 import io.vinnie.servitetracker.android.R;
 import io.vinnie.servitetracker.android.TitleProvider;
 
-public class EventFragment extends ListFragment implements TitleProvider {
+public class EventTotalsFragment extends ListFragment implements TitleProvider {
 
     private String id;
     private String name;
 
-    public static EventFragment newInstance(ParseObject object) {
+    public static EventTotalsFragment newInstance(String objectId, String name) {
         Bundle args = new Bundle();
-        args.putString("eventId", object.getObjectId());
-        args.putString("name", object.getString("name"));
-        EventFragment frag = new EventFragment();
+        args.putString("eventId", objectId);
+        args.putString("name", name);
+        EventTotalsFragment frag = new EventTotalsFragment();
         frag.setArguments(args);
         return frag;
     }

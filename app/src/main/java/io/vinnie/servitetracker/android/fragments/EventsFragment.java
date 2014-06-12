@@ -1,10 +1,10 @@
 package io.vinnie.servitetracker.android.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ContextMenu;
@@ -26,8 +26,8 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import io.vinnie.servitetracker.android.EventActivity;
 import io.vinnie.servitetracker.android.EventsAdapter;
-import io.vinnie.servitetracker.android.MainActivity;
 import io.vinnie.servitetracker.android.R;
 import io.vinnie.servitetracker.android.TitleProvider;
 
@@ -52,8 +52,10 @@ public class EventsFragment extends ListFragment implements TitleProvider {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         ParseObject object = (ParseObject) getListView().getItemAtPosition(position);
-        Fragment frag = EventFragment.newInstance(object);
-        ((MainActivity) getActivity()).swapFragment(frag);
+        Intent intent = new Intent(getActivity(), EventActivity.class);
+        intent.putExtra("eventId", object.getObjectId());
+        intent.putExtra("name", object.getString("name"));
+        getActivity().startActivity(intent);
     }
 
     @Override
