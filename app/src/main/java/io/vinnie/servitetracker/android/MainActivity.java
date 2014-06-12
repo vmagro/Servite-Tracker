@@ -21,7 +21,12 @@ public class MainActivity extends Activity implements DrawerAdapter.DrawerItemLi
         setContentView(R.layout.activity_main);
 
         setupDrawer();
-        onDrawerItemSelected(0);
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.content_frame, drawerFragments.get(0))
+                .commit();
+
+        setTitle(((TitleProvider) drawerFragments.get(0)).getTitle(this));
     }
 
     private void setupDrawer() {
@@ -64,6 +69,8 @@ public class MainActivity extends Activity implements DrawerAdapter.DrawerItemLi
                 .replace(R.id.content_frame, fragment)
                 .addToBackStack(null)
                 .commit();
+
+        setTitle(((TitleProvider) fragment).getTitle(this));
 
         drawerLayout.closeDrawer(GravityCompat.START);
     }
