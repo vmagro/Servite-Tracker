@@ -38,5 +38,7 @@
     <string name="tally">Totals</string>
     <string name="log">Logs</string>
     <string name="already_scanned">Already scanned</string>
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
 
 </resources>
