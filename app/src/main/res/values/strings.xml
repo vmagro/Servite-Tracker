@@ -19,5 +19,9 @@
     <string name="go">Go</string>
     <string name="enter_card">Enter card number</string>
     <string name="last_scanned">Last card scanned:</string>
+    <string name="events">Events</string>
+    <string name="new_event">New event</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
