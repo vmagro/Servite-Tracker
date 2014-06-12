@@ -25,6 +25,7 @@
             android:name=".EventActivity"
             android:label="Event"
             android:screenOrientation="portrait" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="235f6c97bf96cc5d2bcc55cad60042a09e9c68fb"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
