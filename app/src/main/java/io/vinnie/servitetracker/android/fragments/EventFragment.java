@@ -3,6 +3,7 @@ package io.vinnie.servitetracker.android.fragments;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,13 @@ import io.vinnie.servitetracker.android.TitleProvider;
 
 public class EventFragment extends ListFragment implements TitleProvider {
 
+    private String id;
     private String name;
 
-    public static EventFragment newInstance(String name) {
+    public static EventFragment newInstance(ParseObject object) {
         Bundle args = new Bundle();
-        args.putString("name", name);
+        args.putString("eventId", object.getObjectId());
+        args.putString("name", object.getString("name"));
         EventFragment frag = new EventFragment();
         frag.setArguments(args);
         return frag;
@@ -38,6 +41,7 @@ public class EventFragment extends ListFragment implements TitleProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.id = getArguments().getString("eventId");
         this.name = getArguments().getString("name");
     }
 
@@ -49,9 +53,10 @@ public class EventFragment extends ListFragment implements TitleProvider {
     }
 
     private void loadData() {
-        ParseQuery.getQuery("EventRecord").whereEqualTo("event", name).findInBackground(new FindCallback<ParseObject>() {
+        ParseQuery.getQuery("EventRecord").whereEqualTo("event", id).findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                Log.d("event", "found " + parseObjects.size() + " records for " + id);
                 setListAdapter(new EventAdapter(parseObjects));
             }
         });
@@ -80,12 +85,12 @@ public class EventFragment extends ListFragment implements TitleProvider {
                 if (!prioryCounts.containsKey(priory))
                     prioryCounts.put(priory, 0);
                 if (!prioryGradeCounts.containsKey(priory))
-                    prioryGradeCounts.put(year, new HashMap<String, Integer>());
+                    prioryGradeCounts.put(priory, new HashMap<String, Integer>());
                 if (!prioryGradeCounts.get(priory).containsKey(year))
                     prioryGradeCounts.get(priory).put(year, 0);
 
                 gradeCounts.put(year, gradeCounts.get(year) + 1);
-                prioryCounts.put(year, prioryCounts.get(year) + 1);
+                prioryCounts.put(year, prioryCounts.get(priory) + 1);
                 prioryGradeCounts.get(priory).put(year, prioryGradeCounts.get(priory).get(year) + 1);
             }
 

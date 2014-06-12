@@ -52,7 +52,7 @@ public class EventsFragment extends ListFragment implements TitleProvider {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         ParseObject object = (ParseObject) getListView().getItemAtPosition(position);
-        Fragment frag = EventFragment.newInstance(object.getString("name"));
+        Fragment frag = EventFragment.newInstance(object);
         ((MainActivity) getActivity()).swapFragment(frag);
     }
 

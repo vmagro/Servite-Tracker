@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -64,7 +66,18 @@ public class ScanFragment extends Fragment implements TitleProvider, CardListene
                 ParseObject user = parseObjects.get(0);
                 ParseObject eventRecord = new ParseObject("EventRecord");
                 eventRecord.put("name", user.getString("firstName") + " " + user.getString("lastName"));
-                eventRecord.put("event", eventSpinner.getSelectedItem());
+                eventRecord.put("priory", user.getString("priory"));
+                eventRecord.put("year", user.getString("year"));
+                eventRecord.put("event", ((ParseObject) eventSpinner.getSelectedItem()).getObjectId());
+                eventRecord.saveEventually(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null)
+                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getActivity(), R.string.success, Toast.LENGTH_LONG).show();
+                    }
+                });
 
 
                 studentName.setText(user.getString("firstName") + " " + user.getString("lastName"));
