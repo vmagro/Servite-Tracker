@@ -90,7 +90,7 @@ public class EventFragment extends ListFragment implements TitleProvider {
                     prioryGradeCounts.get(priory).put(year, 0);
 
                 gradeCounts.put(year, gradeCounts.get(year) + 1);
-                prioryCounts.put(year, prioryCounts.get(priory) + 1);
+                prioryCounts.put(priory, prioryCounts.get(priory) + 1);
                 prioryGradeCounts.get(priory).put(year, prioryGradeCounts.get(priory).get(year) + 1);
             }
 
@@ -110,7 +110,7 @@ public class EventFragment extends ListFragment implements TitleProvider {
             //add counts for the different priories and sort them
             ArrayList<Pair<String, Integer>> priories = new ArrayList<Pair<String, Integer>>();
             for (String priory : prioryCounts.keySet()) {
-                grades.add(Pair.create(priory, prioryCounts.get(priory)));
+                priories.add(Pair.create(priory, prioryCounts.get(priory)));
             }
             Collections.sort(priories, new Comparator<Pair<String, Integer>>() {
                 @Override
