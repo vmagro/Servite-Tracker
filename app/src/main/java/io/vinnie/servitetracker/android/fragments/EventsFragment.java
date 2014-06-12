@@ -1,6 +1,7 @@
 package io.vinnie.servitetracker.android.fragments;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import io.vinnie.servitetracker.android.MainActivity;
 import io.vinnie.servitetracker.android.R;
 import io.vinnie.servitetracker.android.TitleProvider;
 
@@ -42,10 +45,17 @@ public class EventsFragment extends ListFragment implements TitleProvider {
         super.onViewCreated(view, savedInstanceState);
 
         registerForContextMenu(getListView());
-        
+
         loadEvents();
 
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        ParseObject object = (ParseObject) getListView().getItemAtPosition(position);
+        Fragment frag = EventFragment.newInstance(object.getString("name"));
+        ((MainActivity) getActivity()).swapFragment(frag);
     }
 
     @Override
@@ -99,10 +109,11 @@ public class EventsFragment extends ListFragment implements TitleProvider {
 
     private void showEditDialog(final ParseObject object) {
         final EditText input = new EditText(getActivity());
+        input.setHint(R.string.name);
         new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.new_event)
+                .setTitle(object.has("name") ? "Edit " + object.getString("name") : getString(R.string.new_event))
                 .setView(input)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (TextUtils.isEmpty(input.getText().toString())) {
@@ -119,7 +130,7 @@ public class EventsFragment extends ListFragment implements TitleProvider {
                         });
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
