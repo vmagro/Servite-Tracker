@@ -18,5 +18,6 @@
     <string name="title_activity_launcher">LauncherActivity</string>
     <string name="go">Go</string>
     <string name="enter_card">Enter card number</string>
+    <string name="last_scanned">Last card scanned:</string>
 
 </resources>
