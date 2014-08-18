@@ -9,11 +9,12 @@ import java.io.FileNotFoundException;
 
 public class Main implements IdEnteredListener, FileSelectedListener {
 
+    private Gui gui;
     private Storage storage;
     private StudentDb studentDb;
 
     public Main() {
-        Gui gui = new Gui();
+        gui = new Gui();
         gui.addIdEnteredListener(this);
         gui.addFileSelectedListener(this);
     }
@@ -24,7 +25,13 @@ public class Main implements IdEnteredListener, FileSelectedListener {
 
     @Override
     public void onIdEntered(String id) {
-        storage.write(studentDb.getStudent(id));
+        if (studentDb == null) {
+            gui.error("Student database not loaded");
+        } else if (storage == null) {
+            gui.error("Output file not selected");
+        } else {
+            storage.write(studentDb.getStudent(id));
+        }
     }
 
     @Override

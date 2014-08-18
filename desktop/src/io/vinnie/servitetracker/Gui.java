@@ -129,4 +129,25 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         }
     }
 
+    public void error(String message) {
+        error("Error", message);
+    }
+
+    public void error(final String title, final String message) {
+        try {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    JDialog dialog = new JDialog(Gui.this, title);
+                    dialog.add(new JLabel(message));
+                    dialog.pack();
+                    dialog.setSize(dialog.getWidth() + 20, dialog.getHeight() + 20);
+                    dialog.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
