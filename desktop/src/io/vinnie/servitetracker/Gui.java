@@ -36,41 +36,23 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
     private JLabel studentGrade = new JLabel();
 
     public Gui() {
-        setLayout(new GridBagLayout());
+        setTitle("Servite Tracker");
+        setLayout(new GridLayout(0, 2));
 
-        GridBagConstraints constraints = new GridBagConstraints();
+        add(chooseInputFileButton);
+        add(inputFileName);
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        add(chooseInputFileButton, constraints);
+        add(chooseOutputFileButton);
+        add(outputFileName);
 
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        add(inputFileName, constraints);
+        idField.setSize(200, idField.getHeight());
+        add(idField);
 
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        add(chooseOutputFileButton, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        add(outputFileName, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        add(idField, constraints);
-
-        constraints.gridx = 2;
-        constraints.gridy = 0;
         add(studentId);
-
-        constraints.gridy = 1;
         add(studentName);
 
-        constraints.gridy = 2;
         add(studentPriory);
 
-        constraints.gridy = 3;
         add(studentGrade);
 
 
@@ -141,7 +123,7 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         }
         if (e.getSource().equals(inputFileChooser)) {
             if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
-                outputFileName.setText(outputFileChooser.getSelectedFile().getAbsolutePath());
+                inputFileName.setText(outputFileChooser.getSelectedFile().getAbsolutePath());
                 for (FileSelectedListener listener : fileSelectedListeners) {
                     listener.onStudentDbFileSelected(outputFileChooser.getSelectedFile());
                 }
