@@ -84,16 +84,8 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         idEnteredListeners.add(listener);
     }
 
-    public void removeIdEnteredListener(IdEnteredListener listener) {
-        idEnteredListeners.remove(listener);
-    }
-
     public void addFileSelectedListener(FileSelectedListener listener) {
         fileSelectedListeners.add(listener);
-    }
-
-    public void removeFileSelectedListener(FileSelectedListener listener) {
-        fileSelectedListeners.remove(listener);
     }
 
     @Override
@@ -105,7 +97,7 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
             if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
                 outputFileName.setText(fileChooser.getSelectedFile().getAbsolutePath());
                 for (FileSelectedListener listener : fileSelectedListeners) {
-                    listener.onFileSelected(fileChooser.getSelectedFile());
+                    listener.onOutputFileSelected(fileChooser.getSelectedFile());
                 }
             }
         }

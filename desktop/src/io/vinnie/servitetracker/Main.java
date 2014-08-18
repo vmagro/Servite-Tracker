@@ -28,12 +28,17 @@ public class Main implements IdEnteredListener, FileSelectedListener {
     }
 
     @Override
-    public void onFileSelected(File file) {
+    public void onOutputFileSelected(File file) {
         System.out.println(file);
         try {
             storage = new CsvStorage(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStudentDbFileSelected(File file) {
+
     }
 }

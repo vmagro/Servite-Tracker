@@ -7,5 +7,8 @@ import java.io.File;
  */
 public interface FileSelectedListener {
 
-    public void onFileSelected(File file);
+    public void onOutputFileSelected(File file);
+
+    public void onStudentDbFileSelected(File file);
+
 }
