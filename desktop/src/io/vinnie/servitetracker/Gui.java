@@ -22,6 +22,7 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
     private JTextField idField = new JTextField();
     private JButton chooseFileButton = new JButton("Choose a file");
     private JFileChooser fileChooser = new JFileChooser();
+    private JLabel outputFileName = new JLabel();
 
     public Gui() {
         setLayout(new GridBagLayout());
@@ -31,6 +32,10 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 0;
         add(chooseFileButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        add(outputFileName, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -42,7 +47,9 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         fileChooser.setFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
         fileChooser.addActionListener(this);
 
-        pack();
+
+        setSize(500, 200);
+
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,6 +103,7 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         }
         if (e.getSource().equals(fileChooser)) {
             if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+                outputFileName.setText(fileChooser.getSelectedFile().getAbsolutePath());
                 for (FileSelectedListener listener : fileSelectedListeners) {
                     listener.onFileSelected(fileChooser.getSelectedFile());
                 }
