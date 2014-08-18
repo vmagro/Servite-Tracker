@@ -1,5 +1,7 @@
 package io.vinnie.servitetracker;
 
+import io.vinnie.servitetracker.storage.Student;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -28,6 +30,11 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
     private JLabel inputFileName = new JLabel("No input selected");
     private JLabel outputFileName = new JLabel("No output selected");
 
+    private JLabel studentId = new JLabel();
+    private JLabel studentName = new JLabel();
+    private JLabel studentPriory = new JLabel();
+    private JLabel studentGrade = new JLabel();
+
     public Gui() {
         setLayout(new GridBagLayout());
 
@@ -52,6 +59,19 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 2;
         add(idField, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        add(studentId);
+
+        constraints.gridy = 1;
+        add(studentName);
+
+        constraints.gridy = 2;
+        add(studentPriory);
+
+        constraints.gridy = 3;
+        add(studentGrade);
 
 
         idField.getDocument().addDocumentListener(this);
@@ -127,6 +147,13 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
                 }
             }
         }
+    }
+
+    public void showStudent(Student s) {
+        studentId.setText(s.id);
+        studentName.setText(s.name);
+        studentPriory.setText(s.priory);
+        studentGrade.setText(s.grade);
     }
 
     public void error(String message) {

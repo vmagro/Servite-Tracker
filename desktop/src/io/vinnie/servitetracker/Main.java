@@ -2,6 +2,7 @@ package io.vinnie.servitetracker;
 
 import io.vinnie.servitetracker.storage.CsvStorage;
 import io.vinnie.servitetracker.storage.Storage;
+import io.vinnie.servitetracker.storage.Student;
 import io.vinnie.servitetracker.storage.StudentDb;
 
 import java.io.File;
@@ -30,7 +31,9 @@ public class Main implements IdEnteredListener, FileSelectedListener {
         } else if (storage == null) {
             gui.error("Output file not selected");
         } else {
-            storage.write(studentDb.getStudent(id));
+            Student student = studentDb.getStudent(id);
+            gui.showStudent(student);
+            storage.write(student);
         }
     }
 
