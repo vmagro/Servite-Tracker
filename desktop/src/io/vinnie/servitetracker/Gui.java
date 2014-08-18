@@ -20,9 +20,13 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
     private LinkedList<FileSelectedListener> fileSelectedListeners = new LinkedList<FileSelectedListener>();
 
     private JTextField idField = new JTextField();
-    private JButton chooseFileButton = new JButton("Choose a file");
-    private JFileChooser fileChooser = new JFileChooser();
-    private JLabel outputFileName = new JLabel();
+
+    private JButton chooseInputFileButton = new JButton("Choose input file");
+    private JFileChooser inputFileChooser = new JFileChooser();
+    private JButton chooseOutputFileButton = new JButton("Choose output file");
+    private JFileChooser outputFileChooser = new JFileChooser();
+    private JLabel inputFileName = new JLabel("No input selected");
+    private JLabel outputFileName = new JLabel("No output selected");
 
     public Gui() {
         setLayout(new GridBagLayout());
@@ -31,21 +35,32 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        add(chooseFileButton, constraints);
+        add(chooseInputFileButton, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
-        add(outputFileName, constraints);
+        add(inputFileName, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
+        add(chooseOutputFileButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        add(outputFileName, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
         add(idField, constraints);
 
 
-        chooseFileButton.addActionListener(this);
         idField.getDocument().addDocumentListener(this);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
-        fileChooser.addActionListener(this);
+        chooseInputFileButton.addActionListener(this);
+        chooseOutputFileButton.addActionListener(this);
+        inputFileChooser.setFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
+        outputFileChooser.setFileFilter(new FileNameExtensionFilter("CSV files", "csv"));
+        inputFileChooser.addActionListener(this);
+        outputFileChooser.addActionListener(this);
 
 
         setSize(500, 200);
@@ -90,16 +105,28 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(chooseFileButton)) {
-            fileChooser.showSaveDialog(this);
+        if (e.getSource().equals(chooseInputFileButton)) {
+            inputFileChooser.showOpenDialog(this);
         }
-        if (e.getSource().equals(fileChooser)) {
+        if (e.getSource().equals(chooseOutputFileButton)) {
+            outputFileChooser.showSaveDialog(this);
+        }
+        if (e.getSource().equals(outputFileChooser)) {
             if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
-                outputFileName.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                outputFileName.setText(outputFileChooser.getSelectedFile().getAbsolutePath());
                 for (FileSelectedListener listener : fileSelectedListeners) {
-                    listener.onOutputFileSelected(fileChooser.getSelectedFile());
+                    listener.onOutputFileSelected(outputFileChooser.getSelectedFile());
+                }
+            }
+        }
+        if (e.getSource().equals(inputFileChooser)) {
+            if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+                outputFileName.setText(outputFileChooser.getSelectedFile().getAbsolutePath());
+                for (FileSelectedListener listener : fileSelectedListeners) {
+                    listener.onStudentDbFileSelected(outputFileChooser.getSelectedFile());
                 }
             }
         }
     }
+
 }

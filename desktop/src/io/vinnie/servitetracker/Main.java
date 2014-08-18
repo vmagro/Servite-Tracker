@@ -39,6 +39,6 @@ public class Main implements IdEnteredListener, FileSelectedListener {
 
     @Override
     public void onStudentDbFileSelected(File file) {
-
+        studentDb = new StudentDb(file);
     }
 }
