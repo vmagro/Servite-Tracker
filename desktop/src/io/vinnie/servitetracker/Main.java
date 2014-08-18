@@ -34,6 +34,7 @@ public class Main implements IdEnteredListener, FileSelectedListener {
             Student student = studentDb.getStudent(id);
             gui.showStudent(student);
             storage.write(student);
+            gui.resetIdField();
         }
     }
 

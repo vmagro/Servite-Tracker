@@ -131,6 +131,11 @@ public class Gui extends JFrame implements DocumentListener, ActionListener {
         }
     }
 
+    public void resetIdField() {
+        idField.setText("");
+        idField.grabFocus();
+    }
+
     public void showStudent(Student s) {
         studentId.setText(s.id);
         studentName.setText(s.name);
